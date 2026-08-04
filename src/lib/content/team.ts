@@ -27,7 +27,7 @@ export interface Tenure {
 export const manager: TeamMember = {
   name: "Keshav Kumar",
   role: "Manager",
-  image: "/team/Keshav.jpg",
+  image: "/team/Keshav.jpeg",
 };
 
 export const conveners: TeamMember[] = [
@@ -53,7 +53,7 @@ export const archives: Tenure[] = [
       { name: "Bibaswan Biswas", role: "CTM", image: "/team/BibaswanBiswas.jpg" },
       { name: "Jishnu Sai", role: "CTM", image: "/team/JishnuSai.jpg" },
       { name: "Ansh Agrawal", role: "CTM", image: "/team/AnshAggrawal.jpg" },
-      { name: "Keshav Kumar", role: "CTM", image: "/team/Keshav.jpg" },
+      { name: "Keshav Kumar", role: "CTM", image: "/team/Keshav.jpeg" },
     ],
   },
   {
