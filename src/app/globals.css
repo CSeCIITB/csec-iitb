@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-ink-600;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-ink-950 text-fog-100 antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Hide native cursor when custom cursor is active (pointer devices only) */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
+  /* Custom cursor ring expands on hover */
+  .cursor-ring[data-hover="true"] {
+    width: 44px !important;
+    height: 44px !important;
+    border-color: rgba(0, 207, 255, 0.8) !important;
+    box-shadow: 0 0 12px 2px rgba(0, 207, 255, 0.35) !important;
+    margin-left: -6px !important;
+    margin-top: -6px !important;
+  }
+
+  ::selection {
+    background-color: rgba(0, 207, 255, 0.25);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme("colors.signal.400");
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme("colors.ink.950");
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme("colors.ink.500");
+    border-radius: 999px;
+    border: 2px solid theme("colors.ink.950");
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme("colors.ink.400");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    /* Also restore cursor on reduced-motion (they may not want custom cursor effects) */
+    *, *::before, *::after {
+      cursor: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Fine dot grid — coordinate/trace style used in CTF network diagrams */
+  .bg-grid {
+    background-image: theme("backgroundImage.grid-fine");
+    background-size: theme("backgroundSize.grid");
+    background-position: center -1px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Shimmer gradient text utility */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      theme("colors.signal.300") 0%,
+      theme("colors.cyan.400") 35%,
+      theme("colors.signal.300") 70%,
+      theme("colors.signal.400") 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* HUD corner frame decoration */
+  .hud-frame {
+    position: relative;
+  }
+  .hud-frame::before,
+  .hud-frame::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: theme("colors.cyan.400");
+    border-style: solid;
+    opacity: 0.5;
+  }
+  .hud-frame::before {
+    top: 0; left: 0;
+    border-width: 1px 0 0 1px;
+  }
+  .hud-frame::after {
+    bottom: 0; right: 0;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* Cyber Dossier Frame */
+  .cyber-frame {
+    position: relative;
+  }
+  .cyber-frame::before,
+  .cyber-frame::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: theme("colors.cyan.400");
+    border-style: solid;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+  .cyber-frame::before {
+    top: 0; left: 0;
+    border-width: 2px 0 0 2px;
+  }
+  .cyber-frame::after {
+    bottom: 0; right: 0;
+    border-width: 0 2px 2px 0;
+  }
+  .group:hover .cyber-frame::before,
+  .group:hover .cyber-frame::after {
+    opacity: 1;
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Scan line that passes over an element */
+  .scan-container {
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 207, 255, 0.06) 50%,
+      transparent 100%
+    );
+    background-size: 100% 40%;
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+  }
+
+  /* CRT flicker for easter egg trigger */
+  .crt-flicker {
+    animation: crtFlicker 0.1s step-end infinite;
+  }
+
+  @keyframes crtFlicker {
+    0%, 90%, 100% { opacity: 1; filter: none; }
+    92%, 98% { opacity: 0.85; filter: brightness(0.8); }
+    94%, 96% { opacity: 0.9; filter: brightness(0.9) hue-rotate(5deg); }
+  }
+
+  /* Cyber border glow animation */
+  .cyber-border-pulse {
+    animation: borderGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes borderGlow {
+    0%, 100% { border-color: rgba(59,127,255,0.15); box-shadow: none; }
+    50% { border-color: rgba(0,207,255,0.4); box-shadow: 0 0 20px -4px rgba(0,207,255,0.2); }
+  }
+
+  /* Terminal cursor blink */
+  .terminal-cursor::after {
+    content: "_";
+    animation: blink 1s step-end infinite;
+    color: theme("colors.cyan.400");
+  }
+
+  /* Motion Language */
+  .motion-slow { transition-duration: 700ms; transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  .motion-medium { transition-duration: 400ms; transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  .motion-fast { transition-duration: 200ms; transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+}
