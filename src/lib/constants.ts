@@ -14,7 +14,10 @@ export const socials = {
   linkedin: "https://in.linkedin.com/company/cseciitb",
 };
 
-export const ctfdUrl = "#"; // TODO: replace with the live CTFd instance URL
+// Points every "Weekly Challenges" link/button at the real CTFd instance
+// once it exists (see NEXT_PUBLIC_CTFD_URL in .env.example). Falls back to
+// "#" so the site still builds and runs before CTFd is deployed.
+export const ctfdUrl = process.env.NEXT_PUBLIC_CTFD_URL || "#";
 
 export const primaryNav = [
   { label: "About", href: "/about" },

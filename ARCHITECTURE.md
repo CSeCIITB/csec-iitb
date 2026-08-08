@@ -28,11 +28,22 @@ src/lib/content/*      src/lib/ctfd/*
 
 - `src/lib/ctfd/types.ts` mirrors CTFd's own `/api/v1` response shapes.
 - `src/lib/ctfd/client.ts` defines `CtfdClient`, an interface every CTFd-aware
-  component depends on — never on CTFd's HTTP API directly.
-- **Do not** call CTFd from the browser: it requires an admin/API token for
-  most useful endpoints. Instead, add `src/app/api/ctfd/*` Route Handlers
-  that hold `CTFD_API_TOKEN` server-side and implement `HttpCtfdClient`,
-  then swap the `ctfdClient` export in `client.ts`.
+  component depends on — never on CTFd's HTTP API directly. It exports
+  `MockCtfdClient` when `CTFD_BASE_URL` is unset, and
+  `HttpCtfdClient` (`src/lib/ctfd/http-client.ts`) once it's set — see
+  `.env.example` for the full list of `CTFD_*` / `NEXT_PUBLIC_CTFD_URL`
+  vars this reads.
+- `HttpCtfdClient` calls CTFd's `/api/v1` directly from server-side code
+  (every current consumer — e.g. `CtfdPanel` — is an async Server
+  Component), so `CTFD_API_TOKEN` never reaches the browser without needing
+  a separate Route Handler. If a **Client Component** ever needs live CTFd
+  data (e.g. an interactive scoreboard search), add
+  `src/app/api/ctfd/*` Route Handlers that call `ctfdClient` server-side and
+  have the client component fetch those instead of CTFd directly.
+- A single CTFd instance models one ongoing event, not a list — competition
+  name/dates come from `/api/v1/configs` when `CTFD_API_TOKEN` is an admin
+  token, falling back to the human-authored `CTFD_EVENT_*` env vars
+  otherwise.
 - If CTFd supports OAuth/SSO, member "Sign in" can redirect through CTFd's
   auth and land back with a session — avoiding a second user database.
 
@@ -70,6 +81,14 @@ members should be able to publish), rendered into that same `[slug]` route.
 ## What this pass deliberately did not build
 
 - Auth / sessions
-- Any server-side data mutation (the contact form and CTFd data are stubs)
+- Any server-side data mutation (the contact form is still a stub)
 - The admin dashboard
 - Real photography in `/gallery`
+
+CTFd is wired up (`src/lib/ctfd/http-client.ts`) but untested against a real
+instance — none was deployed yet as of this pass. It was checked against
+CTFd's documented API shapes and a public demo instance
+(`demo.ctfd.io`) for the endpoints that don't require auth, but the
+notifications/configs mappings in particular are best-effort and worth a
+sanity check against your real deployment once it's live (see comments in
+`http-client.ts`).

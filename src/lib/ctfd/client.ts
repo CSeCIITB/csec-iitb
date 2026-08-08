@@ -11,6 +11,7 @@ import {
   mockCompetitions,
   mockScoreboard,
 } from "./mock-data";
+import { HttpCtfdClient } from "./http-client";
 
 /**
  * Everything the site needs from CTFd, expressed as an interface.
@@ -69,4 +70,12 @@ class MockCtfdClient implements CtfdClient {
   }
 }
 
-export const ctfdClient: CtfdClient = new MockCtfdClient();
+/**
+ * `CTFD_BASE_URL` is the switch: unset (e.g. CTFd isn't deployed yet), the
+ * site keeps running on mock data with zero code changes needed. Once it's
+ * set (see `.env.example`), every consumer of `ctfdClient` automatically
+ * starts reading from the real CTFd instance instead.
+ */
+export const ctfdClient: CtfdClient = process.env.CTFD_BASE_URL
+  ? new HttpCtfdClient()
+  : new MockCtfdClient();

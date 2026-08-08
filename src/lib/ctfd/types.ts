@@ -29,7 +29,9 @@ export interface CtfdScoreboardEntry {
   rank: number;
   teamName: string;
   score: number;
-  lastSolveAt: string; // ISO
+  // CTFd's /api/v1/scoreboard doesn't return a per-entry last-solve
+  // timestamp, so this is only populated when a source can supply it.
+  lastSolveAt?: string; // ISO
 }
 
 export interface CtfdAnnouncement {

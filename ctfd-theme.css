@@ -1,0 +1,191 @@
+<!--
+  CSeC CTFd theme override — paste into CTFd's Theme Header
+  (Admin Panel → Config → Theme → Theme Header), wrapped exactly as below.
+
+  This restyles CTFd's default Bootstrap 5 theme to match csec.iitb.ac.in's
+  palette (see tailwind.config.ts) without needing a full custom theme
+  build: dark "ink" background, "signal" blue + "cyan" accents, same
+  Space Grotesk / Inter / JetBrains Mono fonts.
+
+  Paste this WHOLE block (including the <link> and <style> tags) into the
+  Theme Header field as-is.
+-->
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  :root,
+  [data-bs-theme="dark"],
+  [data-bs-theme="light"] {
+    /* Base palette — mirrors tailwind.config.ts */
+    --ink-950: #05070B;
+    --ink-900: #090C13;
+    --ink-800: #10141F;
+    --ink-700: #161B29;
+    --ink-600: #1E2536;
+    --ink-500: #2B3349;
+    --fog-50:  #F6F7F9;
+    --fog-100: #E9EBEF;
+    --fog-300: #B6BBC9;
+    --fog-500: #868DA0;
+    --fog-700: #565D6E;
+    --signal-300: #8CB8FF;
+    --signal-400: #5E9BFF;
+    --signal-500: #3B7FFF;
+    --cyan-400: #00CFFF;
+    --pulse-400: #FFB648;
+
+    /* Bootstrap variable overrides */
+    --bs-body-bg: var(--ink-950);
+    --bs-body-color: var(--fog-100);
+    --bs-primary: var(--signal-500);
+    --bs-primary-rgb: 59, 127, 255;
+    --bs-secondary: var(--fog-500);
+    --bs-dark: var(--ink-900);
+    --bs-link-color: var(--signal-400);
+    --bs-link-hover-color: var(--cyan-400);
+    --bs-border-color: var(--ink-600);
+    --bs-font-sans-serif: "Inter", system-ui, sans-serif;
+  }
+
+  html, body {
+    background-color: var(--ink-950) !important;
+    color: var(--fog-100) !important;
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .navbar-brand {
+    font-family: "Space Grotesk", system-ui, sans-serif !important;
+    letter-spacing: -0.01em;
+  }
+
+  code, pre, .font-monospace, kbd {
+    font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  }
+
+  ::selection {
+    background-color: rgba(0, 207, 255, 0.25);
+    color: #fff;
+  }
+
+  /* Navbar */
+  .navbar.bg-dark {
+    background-color: var(--ink-900) !important;
+    border-bottom: 1px solid var(--ink-600);
+  }
+  .navbar .nav-link {
+    color: var(--fog-300) !important;
+  }
+  .navbar .nav-link:hover {
+    color: var(--fog-50) !important;
+  }
+  .navbar-brand {
+    color: var(--fog-50) !important;
+  }
+
+  /* Cards, jumbotron-style headers, list groups, modals */
+  .card,
+  .jumbotron,
+  .list-group-item,
+  .modal-content {
+    background-color: var(--ink-700) !important;
+    border-color: var(--ink-600) !important;
+    color: var(--fog-100) !important;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background-color: var(--signal-500) !important;
+    border-color: var(--signal-500) !important;
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--signal-400) !important;
+    border-color: var(--signal-400) !important;
+  }
+  .btn-outline-primary {
+    color: var(--signal-400) !important;
+    border-color: var(--signal-500) !important;
+  }
+  .btn-outline-primary:hover {
+    background-color: var(--signal-500) !important;
+    color: #fff !important;
+  }
+
+  /* Links */
+  a {
+    color: var(--signal-400);
+  }
+  a:hover {
+    color: var(--cyan-400);
+  }
+
+  /* Tables — scoreboard, users, teams listings */
+  .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--fog-100);
+    --bs-table-border-color: var(--ink-600);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-hover-bg: rgba(94, 155, 255, 0.06);
+  }
+  .table thead th {
+    color: var(--fog-500);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom-color: var(--ink-500) !important;
+  }
+
+  /* Badges (difficulty tags, notification counts, category pills) */
+  .badge.bg-primary { background-color: var(--signal-500) !important; }
+  .badge.bg-secondary { background-color: var(--ink-600) !important; color: var(--fog-300) !important; }
+  .badge.bg-success { background-color: #3DD68C !important; }
+  .badge.bg-danger { background-color: #FF5C5C !important; }
+  .badge.bg-info { background-color: var(--cyan-400) !important; color: #05070B !important; }
+
+  /* Challenge board tiles */
+  .challenge-button {
+    background-color: var(--ink-700) !important;
+    border: 1px solid var(--ink-600) !important;
+    color: var(--fog-100) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .challenge-button:hover {
+    border-color: var(--signal-500) !important;
+    box-shadow: 0 0 0 1px rgba(59, 127, 255, 0.25), 0 0 24px -8px rgba(59, 127, 255, 0.35);
+  }
+  .challenge-button.solved-challenge {
+    border-color: #3DD68C !important;
+  }
+
+  /* Inputs */
+  .form-control, .form-select {
+    background-color: var(--ink-800) !important;
+    border-color: var(--ink-600) !important;
+    color: var(--fog-100) !important;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--signal-500) !important;
+    box-shadow: 0 0 0 0.2rem rgba(59, 127, 255, 0.25) !important;
+  }
+
+  /* Footer */
+  footer.footer {
+    background-color: var(--ink-950) !important;
+    border-top: 1px solid var(--ink-700);
+  }
+  footer.footer a {
+    color: var(--fog-700) !important;
+  }
+
+  /* Scrollbar, matching the main site */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ink-950); }
+  ::-webkit-scrollbar-thumb { background: var(--ink-500); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-400, #414C69); }
+</style>
