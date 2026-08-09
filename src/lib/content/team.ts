@@ -28,14 +28,15 @@ export const manager: TeamMember = {
   name: "Keshav Kumar",
   role: "Manager",
   image: "/team/Keshav.jpeg",
+  department: "CME", programme: "BS", batch: "2028"
 };
 
 export const conveners: TeamMember[] = [
-  { name: "Abhinav Verma", role: "Convener", image: "/team/Abhinav.jpg" },
-  { name: "Jahanvi Gahlout", role: "Convener", image: "/team/Jahanvi.jpg" },
-  { name: "Kavyam Agrawal", role: "Convener", image: "/team/Kavyam.jpg" },
-  { name: "Sahithi", role: "Convener", image: "/team/Sahithi.jpg" },
-  { name: "Vishad Jain", role: "Convener", image: "/team/Vishad.jpg" },
+  { name: "Abhinav Verma", role: "Convener", image: "/team/Abhinav.jpg", department: "CSE", programme: "B. Tech.", batch: "2029" },
+  { name: "Jahanvi Gahlout", role: "Convener", image: "/team/Jahanvi.jpg", department: "EE", programme: "Dual Degree (B. Tech. + M. Tech.)", batch: "2030"  },
+  { name: "Kavyam Agrawal", role: "Convener", image: "/team/Kavyam.jpg", department: "EE", programme: "B. Tech.", batch: "2029" },
+  { name: "Sahithi", role: "Convener", image: "/team/Sahithi.jpg", department: "EP", programme: "B. Tech.", batch: "2029" },
+  { name: "Vishad Jain", role: "Convener", image: "/team/Vishad.jpg", department: "CSE", programme: "B. Tech.", batch: "2029" },
 ];
 
 export const archives: Tenure[] = [
@@ -45,14 +46,15 @@ export const archives: Tenure[] = [
       name: "Niral Charan", 
       role: "Manager",
       tagline: "Segmentation | Fault | Core | Dumped",
-      image: "/team/Niral.jpeg"
+      image: "/team/Niral.jpeg",
+      department: "CSE", programme: "B. Tech.", batch: "2027" 
     },
     conveners: [
-      { name: "Aakash Tarang", role: "CTM", image: "/team/AakashTarang.jpeg" },
-      { name: "Advait Gupta", role: "CTM", image: "/team/Advait.jpg" },
-      { name: "Bibaswan Biswas", role: "CTM", image: "/team/BibaswanBiswas.jpg" },
-      { name: "Jishnu Sai", role: "CTM", image: "/team/JishnuSai.jpg" },
-      { name: "Ansh Agrawal", role: "CTM", image: "/team/AnshAggrawal.jpg" },
+      { name: "Aakash Tarang", role: "CTM", image: "/team/AakashTarang.jpeg", department: "CSE", programme: "B. Tech.", batch: "2028" },
+      { name: "Advait Gupta", role: "CTM", image: "/team/Advait.jpg", department: "CSE", programme: "B. Tech.", batch: "2028" },
+      { name: "Bibaswan Biswas", role: "CTM", image: "/team/BibaswanBiswas.jpg", department: "CSE", programme: "B. Tech.", batch: "2028" },
+      { name: "Jishnu Sai", role: "CTM", image: "/team/JishnuSai.jpg", department: "CSE", programme: "B. Tech.", batch: "2028" },
+      { name: "Ansh Agrawal", role: "CTM", image: "/team/AnshAggrawal.jpg", department: "CSE", programme: "B. Tech.", batch: "2028" },
       { name: "Keshav Kumar", role: "CTM", image: "/team/Keshav.jpeg" },
     ],
   },
@@ -62,15 +64,16 @@ export const archives: Tenure[] = [
       name: "Lakshya Gadhwal (DarthVishnu)", 
       role: "Manager",
       tagline: "Rev | Pwn | Game Hacking",
-      image: "/team/Lakshya.jpeg"
+      image: "/team/Lakshya.jpeg",
+      department: "CSE", programme: "B. Tech.", batch: "2026"
     },
     conveners: [
-      { name: "Aayush Borkar", role: "CTM", tagline: "Pwn | Rev | Crypto", image: "/team/Aayush.jpg" },
-      { name: "Harsh Suthar (DustOfNow)", role: "CTM", tagline: "Web Exp | Chess", image: "/team/Harsh.jpg" },
-      { name: "Evuri Mohana Sreedhara Reddy (rennaMAhcuS)", role: "CTM", tagline: "Sleep | Forensics | OSINT | The BOYS", image: "/team/Mohana.jpg" },
-      { name: "Niral Charan (Chiral Naran)", role: "CTM", tagline: "Segmentation | Fault | Core | Dumped", image: "/team/Niral.jpeg" },
-      { name: "Ratan Kokal", role: "CTM", tagline: "Cryptography | Digital Forensics | Gaming", image: "/team/Ratan.png" },
-      { name: "Samanth Martis (AlmightyMortal)", role: "CTM", tagline: "SCP | 40K | Rev", image: "/team/Samanth.jpg" },
+      { name: "Aayush Borkar", role: "CTM", tagline: "Pwn | Rev | Crypto", image: "/team/Aayush.jpg", department: "CSE", programme: "B. Tech.", batch: "2027" },
+      { name: "Harsh Suthar (DustOfNow)", role: "CTM", tagline: "Web Exp | Chess", image: "/team/Harsh.jpg", department: "CSE", programme: "B. Tech.", batch: "2027" },
+      { name: "Evuri Mohana Sreedhara Reddy (rennaMAhcuS)", role: "CTM", tagline: "Sleep | Forensics | OSINT | The BOYS", image: "/team/Mohana.jpg", department: "CSE", programme: "B. Tech.", batch: "2027" },
+      { name: "Niral Charan (Chiral Naran)", role: "CTM", tagline: "Segmentation | Fault | Core | Dumped", image: "/team/Niral.jpeg", department: "CSE", programme: "B. Tech.", batch: "2027" },
+      { name: "Ratan Kokal", role: "CTM", tagline: "Cryptography | Digital Forensics | Gaming", image: "/team/Ratan.png", department: "AE", programme: "B. Tech.", batch: "2027" },
+      { name: "Samanth Martis (AlmightyMortal)", role: "CTM", tagline: "SCP | 40K | Rev", image: "/team/Samanth.jpg", department: "AE", programme: "B. Tech.", batch: "2027" },
     ],
   }
 ];
