@@ -6,6 +6,7 @@ import type {
   CtfdUserSummary,
 } from "./types";
 import type { CtfdClient } from "./client";
+import { DEFAULT_CTFD_URL } from "@/lib/constants";
 
 /**
  * Live implementation of `CtfdClient`, backed by a real CTFd instance's
@@ -39,7 +40,7 @@ import type { CtfdClient } from "./client";
  *   used to fill in whatever it returns.
  */
 
-const CTFD_BASE_URL = (process.env.CTFD_BASE_URL ?? "").replace(/\/+$/, "");
+const CTFD_BASE_URL = (process.env.CTFD_BASE_URL || DEFAULT_CTFD_URL).replace(/\/+$/, "");
 const CTFD_API_TOKEN = process.env.CTFD_API_TOKEN;
 
 // How long Next.js may serve a cached response before refetching. CTFd

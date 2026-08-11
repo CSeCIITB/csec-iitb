@@ -71,11 +71,11 @@ class MockCtfdClient implements CtfdClient {
 }
 
 /**
- * `CTFD_BASE_URL` is the switch: unset (e.g. CTFd isn't deployed yet), the
- * site keeps running on mock data with zero code changes needed. Once it's
- * set (see `.env.example`), every consumer of `ctfdClient` automatically
- * starts reading from the real CTFd instance instead.
+ * CTFd is live (see `DEFAULT_CTFD_URL` in `constants.ts`), so this always
+ * reads from the real instance — no env var setup required for any
+ * contributor to see real data. `MockCtfdClient` above is kept around for
+ * reference/offline dev; to force it, set `CTFD_USE_MOCK=1` locally.
  */
-export const ctfdClient: CtfdClient = process.env.CTFD_BASE_URL
-  ? new HttpCtfdClient()
-  : new MockCtfdClient();
+export const ctfdClient: CtfdClient = process.env.CTFD_USE_MOCK
+  ? new MockCtfdClient()
+  : new HttpCtfdClient();

@@ -187,14 +187,21 @@ people who haven't registered on CTFd yet.
 
 ### 7. Generate an API token (recommended either way)
 
-Even with Public visibility, an admin token lets the website pull the
-event name/dates from CTFd's config automatically, and is required to read
-notifications/team lookups. As the admin user:
+**Not required if Visibility is set to Public** (recommended, see step 6)
+— challenges/scoreboard work with zero auth in that case, which is exactly
+why Public is the recommended setting: no contributor needs a token for
+the site to show real data. Only generate one if you want the live event
+name/dates pulled automatically from CTFd's config, or if you set
+Visibility to Private instead. As the admin user:
 
 1. Go to `/settings` → **Access Tokens** tab.
 2. Set an expiration (or "never", though rotating it periodically is
    better practice) and click **Generate**.
 3. Copy the token immediately — CTFd only shows it once.
+4. Put it in your own local `.env.local` only (see Part 2) — never commit
+   it, and never paste it into chat/Slack/screenshots. If one ever does
+   leak, revoke it immediately (same Access Tokens tab) and generate a
+   fresh one.
 
 ### 8. Add your first challenges
 
@@ -208,39 +215,31 @@ up on the site automatically next time the homepage panel refreshes
 
 ## Part 2 — Connecting the website
 
-Once CTFd is live, in `csec-iitb/`:
+**Nothing to do here for most contributors.** The real CTFd URL
+(`https://ctf-csec.up.railway.app`) is checked into
+`src/lib/constants.ts` as `DEFAULT_CTFD_URL` — it's public info, not a
+secret, so it didn't make sense to make every contributor configure it
+via `.env.local` just to see real data. Anyone who clones the repo and
+runs `npm run dev` already sees the live challenges/scoreboard, no setup
+step required. That's only possible because CTFd's Visibility is set to
+Public (step 6) — if it were Private, this section would matter a lot
+more, since every contributor would need their own token.
 
-1. Copy `.env.example` to `.env.local` if you haven't already.
-2. Fill in:
+`.env.local` is only needed if you want to **override** the default —
+e.g. pointing at a different/local CTFd instance for testing, or (rarely)
+using a token for the config-name pull:
 
-   ```
-   CTFD_BASE_URL=https://ctf.csec.iitb.ac.in
-   CTFD_API_TOKEN=<the token from step 7>
-   NEXT_PUBLIC_CTFD_URL=https://ctf.csec.iitb.ac.in
-   ```
+```
+CTFD_BASE_URL=http://localhost:8000
+CTFD_API_TOKEN=<only if you have a reason to use one>
+NEXT_PUBLIC_CTFD_URL=http://localhost:8000
+```
 
-   Leave the `CTFD_EVENT_*` vars unless the config visibility means the
-   token can't read `/api/v1/configs` — in that case set
-   `CTFD_EVENT_NAME` / `CTFD_EVENT_DESCRIPTION` as a manual fallback (see
-   comments in `.env.example`).
-
-3. Restart the dev server:
-
-   ```bash
-   npm run dev
-   ```
-
-4. Open `http://localhost:3000` — the homepage's "Live where the club
-   actually competes" section should now show your real featured
-   competition, scoreboard, and recent challenges instead of the sample
-   data. The "Weekly Challenges" buttons in the navbar/hero now link to
-   your real CTFd URL instead of `#`.
-
-If the panel shows empty scoreboard/challenges instead of erroring, check
-the terminal running `npm run dev` — `http-client.ts` logs a
-`[ctfd] ... failed, falling back` line with the actual error (wrong token,
-visibility set to Private without a token, DNS/HTTPS issue, etc.) rather
-than crashing the page.
+If the panel ever shows empty scoreboard/challenges instead of real data,
+check the terminal running `npm run dev` — `http-client.ts` logs a
+`[ctfd] ... failed, falling back` line with the actual error (Visibility
+flipped back to Private, DNS/HTTPS issue with the Railway URL, etc.)
+rather than crashing the page.
 
 ### When you deploy the website itself
 
