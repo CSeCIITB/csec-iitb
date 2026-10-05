@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUpRight, Trophy, Terminal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,9 +25,9 @@ export async function CtfdPanel() {
             description="The website is the front door. Challenges, scoreboards, and submissions all live on our CTFd instance — wired for a direct handoff."
           />
           <Button variant="outline" size="sm" asChild>
-            <Link href={ctfdUrl}>
+            <a href={ctfdUrl}>
               Join Weekly Challenges <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
+            </a>
           </Button>
         </div>
 
@@ -55,12 +54,12 @@ export async function CtfdPanel() {
                 <span className="font-mono text-[12px] text-fog-700">
                   {featured && new Date(featured.startsAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 </span>
-                <Link
+                <a
                   href={ctfdUrl}
                   className="inline-flex items-center gap-1 text-[13px] font-medium text-signal-400 hover:text-signal-300"
                 >
                   Register on CTFd <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
+                </a>
               </div>
             </Card>
           </Reveal>

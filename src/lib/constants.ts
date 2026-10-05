@@ -14,15 +14,14 @@ export const socials = {
   linkedin: "https://in.linkedin.com/company/cseciitb",
 };
 
-// Real, public URL of the CSeC CTFd instance — not a secret, this is
-// exactly what every "Weekly Challenges" link is supposed to point at, so
-// it's a checked-in default rather than something every contributor has to
-// set up in their own .env.local. NEXT_PUBLIC_CTFD_URL / CTFD_BASE_URL can
-// still override this (e.g. to point at a local CTFd instance for testing),
-// but nobody needs to for the site to work correctly out of the box.
-export const DEFAULT_CTFD_URL = "https://ctf-csec.up.railway.app";
+// CTFd runs alongside the site (see deploy/). CTFD_BASE_URL overrides this
+// for server-side API calls, e.g. http://ctfd:8000 inside the container network.
+export const DEFAULT_CTFD_URL = "http://localhost:8000";
 
-export const ctfdUrl = process.env.NEXT_PUBLIC_CTFD_URL || DEFAULT_CTFD_URL;
+// Every "Weekly Challenges" link goes through /ctf, which redirects to the
+// public CTFd URL at request time (CTFD_PUBLIC_URL). That keeps the link
+// correct when the public URL changes without needing a rebuild.
+export const ctfdUrl = "/ctf";
 
 export const primaryNav = [
   { label: "About", href: "/about" },

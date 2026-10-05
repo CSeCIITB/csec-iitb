@@ -64,13 +64,13 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
+          <a
             href={ctfdUrl}
             className="flex items-center gap-2 rounded-full border border-ink-500 px-3.5 py-2 text-[13px] font-medium text-fog-300 transition-colors hover:border-signal-500/50 hover:text-fog-50"
           >
             <StatusDot tone="live" pulse />
             Weekly Challenges
-          </Link>
+          </a>
           <Button size="sm" asChild>
             <Link href="/contact">
               Join CSeC <ArrowUpRight className="h-3.5 w-3.5" />
@@ -103,7 +103,7 @@ export function Navbar() {
             ))}
             <div className="mt-4 flex flex-col gap-2.5">
               <Button variant="secondary" asChild>
-                <Link href={ctfdUrl}>Weekly Challenges</Link>
+                <a href={ctfdUrl}>Weekly Challenges</a>
               </Button>
               <Button asChild>
                 <Link href="/contact">Join CSeC</Link>

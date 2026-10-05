@@ -31,8 +31,7 @@ src/lib/content/*      src/lib/ctfd/*
   component depends on — never on CTFd's HTTP API directly. It exports
   `MockCtfdClient` when `CTFD_BASE_URL` is unset, and
   `HttpCtfdClient` (`src/lib/ctfd/http-client.ts`) once it's set — see
-  `.env.example` for the full list of `CTFD_*` / `NEXT_PUBLIC_CTFD_URL`
-  vars this reads.
+  `.env.example` for the full list of `CTFD_*` vars this reads.
 - `HttpCtfdClient` calls CTFd's `/api/v1` directly from server-side code
   (every current consumer — e.g. `CtfdPanel` — is an async Server
   Component), so `CTFD_API_TOKEN` never reaches the browser without needing

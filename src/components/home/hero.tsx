@@ -107,10 +107,10 @@ export function Hero() {
           className="mx-auto mt-9 flex w-fit flex-col items-center gap-3 sm:flex-row"
         >
           <Button size="lg" asChild>
-            <Link href={ctfdUrl}>
+            <a href={ctfdUrl}>
               <Flag className="h-4 w-4" />
               Weekly Challenges
-            </Link>
+            </a>
           </Button>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/about">

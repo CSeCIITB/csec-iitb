@@ -13,10 +13,6 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* values are inlined into the client bundle at build time,
-# so they must be passed as build args rather than runtime env.
-ARG NEXT_PUBLIC_CTFD_URL=""
-ENV NEXT_PUBLIC_CTFD_URL=$NEXT_PUBLIC_CTFD_URL
 RUN npm run build
 
 # ---- runner: minimal image that only contains what `next start` needs ----

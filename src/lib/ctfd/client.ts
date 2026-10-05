@@ -71,9 +71,9 @@ class MockCtfdClient implements CtfdClient {
 }
 
 /**
- * CTFd is live (see `DEFAULT_CTFD_URL` in `constants.ts`), so this always
- * reads from the real instance — no env var setup required for any
- * contributor to see real data. `MockCtfdClient` above is kept around for
+ * Reads from the CTFd instance at `CTFD_BASE_URL` (default
+ * `DEFAULT_CTFD_URL` in `constants.ts`), falling back to placeholder data
+ * when it's unreachable. `MockCtfdClient` above is kept around for
  * reference/offline dev; to force it, set `CTFD_USE_MOCK=1` locally.
  */
 export const ctfdClient: CtfdClient = process.env.CTFD_USE_MOCK

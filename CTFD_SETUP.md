@@ -8,49 +8,39 @@ live data automatically — no code changes needed (see `ARCHITECTURE.md`).
 Two parts: **Part 1** stands up CTFd itself. **Part 2** connects it to the
 site.
 
-**CSeC is currently running Part 1 via Railway** (see 1B below) rather than
-a self-managed VPS — cheaper to start with zero server experience, no
-Docker/SSH/HTTPS setup required. Part 1A (VPS) is kept here as the
-migration path for later, since it's cheaper long-term. See "Migrating off
-Railway" at the bottom.
+**CSeC currently runs everything on one machine** — CTFd, the website, and
+public HTTPS links via Cloudflare quick tunnels — with a single script (see
+Part 1 below). Part 1A (VPS) is kept as the path to a permanent server.
 
 ---
 
-## Part 1B — Deploying CTFd on Railway (current setup)
+## Part 1 — Running on this machine (current setup)
 
-1. In Railway, **New Project → Template**, search "CTFd", deploy it. This
-   uses the official `ctfd/ctfd` image with SQLite (no separate database
-   needed) — no Docker/server knowledge required on your end.
-2. Once the service is "Online", go to its **Settings → Networking** and
-   click **Generate Domain** if one isn't already assigned. That
-   `https://xxxx.up.railway.app` URL is your `CTFD_BASE_URL`.
-3. Visit that URL and run through the setup wizard (see step 5 in Part 1A
-   below — identical either way).
-4. Generate an API token (step 7 below).
-5. **Important, easy to miss**: if you set User Mode to "Teams" during
-   setup, CTFd requires *every* account — including the admin account this
-   token belongs to — to have a team before it'll serve challenges/config
-   through the API. Log in, go to `/team`, and create one (any name is
-   fine). Without this, API requests get silently redirected to CTFd's
-   login/team page instead of returning data — `http-client.ts` surfaces
-   this clearly now (`CtfdApiError ... redirected to CTFd's login page`),
-   but it's worth doing up front.
-6. Also check **Admin Panel → Config → Time**: if the competition is
-   Paused/Halted (or a start time in the future), the challenges endpoint
-   won't serve data even with a valid admin token + team. Set it to
-   running (or clear the start/end times) if you want the "weekly
-   challenges" board live year-round rather than only during set windows.
-7. This Railway template has no Redis, so it falls back to a slower cache.
-   If something looks stale after a config change (e.g. you just created a
-   team and API calls still act like you haven't), restart the service in
-   Railway (Settings → the service → restart/redeploy) to clear it.
-8. Optional: add a custom domain (Settings → Networking → **Custom
-   Domain**) pointed at a subdomain like `ctf.csec.iitb.ac.in` instead of
-   the raw `railway.app` URL — see "Migrating off Railway" for why this is
-   worth doing early.
+Needs Docker or Podman. From the repo root:
 
-Then skip to **Part 2** below with your Railway URL (or custom domain) as
-`CTFD_BASE_URL`.
+```bash
+deploy/local-server.sh up       # start/refresh everything, print public links
+deploy/local-server.sh urls     # print the current links again
+deploy/local-server.sh status   # container status
+deploy/local-server.sh down     # stop (CTFd data stays in the csec-ctfd-data volume)
+```
+
+This starts `csec-ctfd` (SQLite in the `csec-ctfd-data` volume), `csec-web`
+(the site, talking to CTFd over the internal network), and one Cloudflare
+quick tunnel for each. The CTFd `SECRET_KEY` and the current URLs are kept
+in `deploy/.state/` (gitignored).
+
+- **Fresh instance = open setup wizard.** On a brand-new CTFd volume, finish
+  `/setup` (step 5 of Part 1A) *immediately*, before sharing the link —
+  whoever completes it first becomes admin.
+- **Quick-tunnel URLs are random and change** whenever the tunnel containers
+  restart (including a reboot). Re-run `up`; the site's "Weekly Challenges"
+  links go through `/ctf`, which redirects to the current CTFd URL, so no
+  rebuild is needed. For a fixed URL, use a named Cloudflare tunnel with a
+  domain instead.
+- Tunnels use `--protocol http2` because UDP/QUIC is blocked on some
+  networks (e.g. campus Wi-Fi).
+- The machine has to stay on and online for the links to work.
 
 ---
 
@@ -215,36 +205,28 @@ up on the site automatically next time the homepage panel refreshes
 
 ## Part 2 — Connecting the website
 
-**Nothing to do here for most contributors.** The real CTFd URL
-(`https://ctf-csec.up.railway.app`) is checked into
-`src/lib/constants.ts` as `DEFAULT_CTFD_URL` — it's public info, not a
-secret, so it didn't make sense to make every contributor configure it
-via `.env.local` just to see real data. Anyone who clones the repo and
-runs `npm run dev` already sees the live challenges/scoreboard, no setup
-step required. That's only possible because CTFd's Visibility is set to
-Public (step 6) — if it were Private, this section would matter a lot
-more, since every contributor would need their own token.
-
-`.env.local` is only needed if you want to **override** the default —
-e.g. pointing at a different/local CTFd instance for testing, or (rarely)
-using a token for the config-name pull:
+With `deploy/local-server.sh` this is wired up automatically. Running the
+site any other way (e.g. `npm run dev`), these env vars point it at CTFd:
 
 ```
-CTFD_BASE_URL=http://localhost:8000
+CTFD_BASE_URL=http://localhost:8000      # server-side API calls (default)
+CTFD_PUBLIC_URL=https://ctf.example.com  # where "Weekly Challenges" (/ctf) redirects
 CTFD_API_TOKEN=<only if you have a reason to use one>
-NEXT_PUBLIC_CTFD_URL=http://localhost:8000
 ```
+
+The challenges/scoreboard panel works without a token as long as CTFd's
+Visibility is Public (step 6).
 
 If the panel ever shows empty scoreboard/challenges instead of real data,
 check the terminal running `npm run dev` — `http-client.ts` logs a
 `[ctfd] ... failed, falling back` line with the actual error (Visibility
-flipped back to Private, DNS/HTTPS issue with the Railway URL, etc.)
+flipped back to Private, CTFd container not running, etc.)
 rather than crashing the page.
 
 ### When you deploy the website itself
 
 Whatever hosts the production site (Vercel, your own server, etc.) needs
-the same three env vars set in its environment/project settings — `.env.local`
+the same env vars set in its environment/project settings — `.env.local`
 only applies locally.
 
 ---
@@ -255,7 +237,8 @@ only applies locally.
   No website changes needed.
 - **Updating CTFd**: `docs.ctfd.io/docs/deployment/updating` — generally
   `git pull && docker compose up -d --build` in the CTFd directory (VPS)
-  or just redeploy the service (Railway).
+  or `deploy/local-server.sh down && docker pull ctfd/ctfd && deploy/local-server.sh up`
+  for the local setup.
 - **Backups**: back up the database periodically either way — Admin Panel
   has an Exports feature for a full JSON/zip export of the whole CTF
   (challenges, users, submissions, config), independent of hosting method.
@@ -264,7 +247,7 @@ only applies locally.
 
 ## Part 3 — Branding CTFd to match csec.iitb.ac.in
 
-CTFd's default theme is plain Bootstrap. Self-hosted (Railway included)
+CTFd's default theme is plain Bootstrap. Self-hosted
 you don't get full custom theme uploads without CTFd's paid tiers, but
 Admin Panel → Config gives you logo/favicon/color, and **Config → Theme**
 gives you a raw CSS/JS injection point (Theme Header) — enough to fully
@@ -321,23 +304,3 @@ one CSS paste. If something looks off after pasting, the most common cause
 is Theme Header content not saving fully (long paste, check it wasn't
 truncated) — reopen the field and confirm the closing `</style>` tag is
 still there.
-
----
-
-## Migrating off Railway later
-
-Railway's free trial is ~$5 in credit (roughly a week for this app), then
-it's their Hobby plan at $5/month minimum to keep it running — fine to
-start with, but a free VPS (Part 1A) is cheaper long-term once there's
-time to set one up. Moving over doesn't mean starting from scratch:
-
-1. Stand up CTFd on the new server via Part 1A.
-2. On the Railway instance: Admin Panel → export a full backup.
-3. On the new instance: Admin Panel → import that backup.
-4. Generate a fresh API token on the new instance.
-5. Update `CTFD_BASE_URL` / `CTFD_API_TOKEN` / `NEXT_PUBLIC_CTFD_URL`.
-
-If you set up a custom domain on Railway (Part 1B, step 7) instead of using
-the raw `railway.app` URL, step 5 shrinks to just the token — repoint that
-domain's DNS at the new server's IP and `CTFD_BASE_URL` never has to
-change.

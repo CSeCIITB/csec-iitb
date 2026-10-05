@@ -43,12 +43,16 @@ or with Compose (reads `.env` if present):
 docker compose up -d --build
 ```
 
-- **Runtime env** (`CTFD_BASE_URL`, `CTFD_API_TOKEN`, `CTFD_EVENT_*`) is read
-  by the server and can be passed with `-e` / `--env-file`.
-- **`NEXT_PUBLIC_CTFD_URL`** is inlined into the browser bundle, so it must be
-  set at build time: `docker build --build-arg NEXT_PUBLIC_CTFD_URL=https://... .`
+- CTFd settings (`CTFD_BASE_URL`, `CTFD_PUBLIC_URL`, `CTFD_API_TOKEN`,
+  `CTFD_EVENT_*`) are all read at runtime — pass them with `-e` / `--env-file`.
 - The container listens on `PORT` (default `3000`) — put it behind a reverse
   proxy / load balancer that terminates TLS.
+
+### Self-hosting everything on one machine
+
+`deploy/local-server.sh up` runs the site **and** CTFd in containers and
+prints public HTTPS links (Cloudflare quick tunnels). See `CTFD_SETUP.md`,
+Part 1.
 
 ## Project structure
 

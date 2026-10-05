@@ -206,7 +206,7 @@ function envCompetition(): CtfdCompetition {
     description:
       process.env.CTFD_EVENT_DESCRIPTION ||
       "New challenges land on our CTFd instance every week — jump in any time.",
-    ctfdUrl: process.env.NEXT_PUBLIC_CTFD_URL || CTFD_BASE_URL || "#",
+    ctfdUrl: "/ctf",
   };
 }
 

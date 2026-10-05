@@ -9,3 +9,6 @@ next-env.d.ts
 *.tsbuildinfo
 
 .vercel
+
+# local server state (secrets, tunnel URLs)
+deploy/.state
