@@ -1,7 +1,7 @@
 # CSeC IIT Bombay — Website
 
 The official website for the Cyber Security Community (CSeC), IIT Bombay.
-Next.js 14 (App Router), TypeScript, Tailwind CSS, Framer Motion.
+Next.js 16 (App Router), TypeScript, Tailwind CSS, Framer Motion.
 
 ## Getting started
 
@@ -26,6 +26,29 @@ Open http://localhost:3000.
 | `npm run start`     | Serve the production build           |
 | `npm run lint`      | ESLint                               |
 | `npm run typecheck` | `tsc --noEmit`                       |
+
+## Deployment (Docker)
+
+The app builds as a Next.js [standalone](https://nextjs.org/docs/app/api-reference/config/next-config-js/output)
+server and ships in a small, non-root `node:22-alpine` image.
+
+```bash
+docker build -t csec-iitb .
+docker run -p 3000:3000 --env-file .env csec-iitb   # --env-file is optional
+```
+
+or with Compose (reads `.env` if present):
+
+```bash
+docker compose up -d --build
+```
+
+- **Runtime env** (`CTFD_BASE_URL`, `CTFD_API_TOKEN`, `CTFD_EVENT_*`) is read
+  by the server and can be passed with `-e` / `--env-file`.
+- **`NEXT_PUBLIC_CTFD_URL`** is inlined into the browser bundle, so it must be
+  set at build time: `docker build --build-arg NEXT_PUBLIC_CTFD_URL=https://... .`
+- The container listens on `PORT` (default `3000`) — put it behind a reverse
+  proxy / load balancer that terminates TLS.
 
 ## Project structure
 

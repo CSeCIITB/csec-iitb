@@ -11,6 +11,13 @@ interface DossierModalProps {
   onClose: () => void;
 }
 
+// Stable pseudo-ID derived from the name, so it doesn't change between renders.
+function dossierId(name: string) {
+  let hash = 0;
+  for (const ch of name) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return (hash % 900) + 100;
+}
+
 export function DossierModal({ member, isOpen, onClose }: DossierModalProps) {
   if (!member) return null;
 
@@ -72,7 +79,7 @@ export function DossierModal({ member, isOpen, onClose }: DossierModalProps) {
                           Identity Verified
                         </div>
                         <div className="font-mono text-[9px] text-ink-500 uppercase tracking-widest">
-                          Photo Pending // ID: CSEC-{Math.floor(Math.random() * 900) + 100}
+                          Photo Pending // ID: CSEC-{dossierId(member.name)}
                         </div>
                       </div>
                     )}

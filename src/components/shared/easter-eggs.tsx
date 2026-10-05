@@ -15,6 +15,18 @@ const KONAMI_CODE = [
   "a",
 ];
 
+function triggerKonami() {
+  console.log(
+    "%c[ACCESS GRANTED] Konami Code accepted.",
+    "color: #FFB648; font-weight: bold; font-size: 14px;"
+  );
+  alert("ACCESS GRANTED: csec{h4ck3r_m1nd53t_unl0ck3d}");
+  document.body.classList.add("crt-flicker");
+  setTimeout(() => {
+    document.body.classList.remove("crt-flicker");
+  }, 2000);
+}
+
 export function EasterEggs() {
   useEffect(() => {
     // Initial console message for developers
@@ -44,18 +56,6 @@ export function EasterEggs() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  const triggerKonami = () => {
-    console.log(
-      "%c[ACCESS GRANTED] Konami Code accepted.",
-      "color: #FFB648; font-weight: bold; font-size: 14px;"
-    );
-    alert("ACCESS GRANTED: csec{h4ck3r_m1nd53t_unl0ck3d}");
-    document.body.classList.add("crt-flicker");
-    setTimeout(() => {
-      document.body.classList.remove("crt-flicker");
-    }, 2000);
-  };
 
   return null;
 }

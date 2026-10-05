@@ -123,7 +123,7 @@ export function HeroLogo() {
             CSeC
           </h1>
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-cyan-400">
-            Gotta Hack 'em All
+            Gotta Hack &apos;em All
           </p>
         </motion.div>
       </motion.div>
